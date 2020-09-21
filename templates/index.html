@@ -1,0 +1,75 @@
+<!-- ---------------------------------------- [edit] ---------------------------------------- -->
+{% extends 'base.html' %}
+{% block content %}
+<!-- ---------------------------------------------------------------------------------------- -->
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+  <!-- 디자인은 알아서 -->
+  <title>영상기록</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <link rel="stylesheet" href="{% static 'style.css' %}" />
+  <!-- <script src="//developers.kakao.com/sdk/js/kakao.min.js"></script> -->
+</head>
+
+<body>
+  <h1 style="border-bottom:2px solid black; width: 80%; margin-left: auto; margin-right: auto;"><br>
+    <img src="static/images/drone.jpg" width=150>
+    영상기록
+  </h1>
+
+  <div style="border-bottom:2px solid black; width: 80%; margin-left: auto; margin-right: auto;" id="videoCanvas">
+    <video id="camera" autoplay playsinline></video>
+    <canvas id="photo"></canvas>
+  </div>
+
+  {% comment %} <div id="buttons">
+    <button id="startrecord">startrecord</button>
+    <span> or </span>
+    <button id="endrecord">endrecord</button>
+  </div> {% endcomment %}
+
+  <table style="margin-left: auto; margin-right: auto;">
+    <tr>
+      <td style="font-size: large;"> 기록 종료 </td>
+      <td>
+        <label class="switch">
+          <input type="checkbox" id='toggle'>
+          <span class="slider round"></span>
+        </label>
+      </td>
+      <td style="font-size: large;"> 기록 시작 </td>
+    </tr>
+  </table>
+  <table  class="table-dark table-striped rounded-lg " style="margin-left: auto; margin-right: auto;">
+
+    <tbody>
+      <tr>
+        <td style="text-align: left;">사진 저장 간격(사진 저장 간격을 입력해 주세요): </td>
+        <td><input type="number" class="form-control" name="interval" id="interval" value="1" placeholder="사진 저장 간격을 입력해 주세요"></td>
+      </tr>
+      <tr>
+        <td style="text-align: left;">그룹이름 (그룹이름을 입력해 주세요):  </td>
+        <td><input type="text" class="form-control" name="groupname" id="groupname" value="1" placeholder="그룹이름을 입력해 주세요"></td>
+      </tr>
+      <tr>
+        <td style="text-align: left;">드론ID (드론ID를 입력해 주세요): </td>
+        <td><input type="text" class="form-control" name="dronename" id="dronename" value="1111" placeholder="드론ID를 입력해 주세요"></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
+  <script src="{% static 'js/main.js' %}"></script>
+</body>
+
+</html>
+<script>
+  $(document).ready(function(){
+    console.log("start")
+    grabWebCamVideo();
+  });
+</script>
+
+{% endblock %}

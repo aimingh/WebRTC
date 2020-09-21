@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="container" style="margin-top:20px">
+  <h2>{{l.name}} 상세 보기</h2>
+  <p></p>
+  <form name="form">
+  <table class="table">
+  	<colgroup>
+  		<col width="25%"/>
+  		<col width="*"/>
+  	</colgroup>
+
+    <tbody>
+      <tr>
+        <td>파일이름</td>
+        <td>{{l.name}}</td>
+      </tr>      
+      <tr >
+        <td>그룹ID</td>
+        <td>{{l.groupid}}</td>
+      </tr>
+      <tr >
+        <td>파일경로</td>
+        <td>{{l.path}}</td>
+      </tr>
+      <tr >
+        <td>주소</td>
+        <td>{{l.address}}</td>
+      </tr>
+      <tr >
+        <td>좌표</td>
+        <td>{{l.x}}, {{l.y}}</td>
+      </tr>
+      <tr >
+      <tr >
+        <td>드론 ID</td>
+        <td>{{l.droneid}}</td>
+      </tr>
+      <tr >
+        <td style = 'vertical-align: inherit;'>영상</td>
+        <td style = 'vertical-align: inherit;'><img src="{{l.path}}/{{l.name}}" width=640></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="container" style="text-align:right">
+	  <div class="btn-group">
+		  <button type="button" id="gobacklist" class="btn btn-primary" value="{{l.groupid}}" onclick="goList()">목록</button>
+	  </div>
+	</div>
+</form>	
+</div>
+
+<script>
+// 목록으로 돌아가기
+function goList(){
+  groupid = document.getElementById('gobacklist').value;
+  location.href="/board/grouplist/" + groupid; //get방식으로 페이지 넘길때
+}
+</script>
+{% endblock %}

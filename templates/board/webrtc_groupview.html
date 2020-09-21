@@ -1,0 +1,175 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="container my-auto" style="margin-top:20px">
+  <h2 style="margin-top:40px">그룹정보 미리보기</h2>
+  <p></p>
+  <form name="form">
+  <table class="table my-auto">
+  	<colgroup>
+  		<col width="20%"/>
+  		<col width="40%"/>
+  		<col width="40%"/>
+  	</colgroup>
+    <thead class="table-dark">
+      <tr>
+        <th></th>
+        <th>첫번째 파일</th>
+        <th>마지막 파일</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>파일이름</td>
+        {% for l in list %}
+        <td>{{l.name}}</td>
+        {% endfor %}
+      </tr>      
+      <tr >
+        <td>파일경로</td>
+        {% for l in list %}
+        <td>{{l.path}}</td>
+        {% endfor %}
+      </tr>
+      <tr>
+        <td>주소</td>
+        {% for l in list %}
+        <td>{{l.address}}</td>
+        {% endfor %}
+      </tr>
+      <tr >
+        <td>영상</td>
+        {% for l in list %}
+        <td><img src="{{l.path}}/{{l.name}}" width=300></td>
+        <!-- <img src="/upload/2020/09/15/1/1.jpeg" width=400> -->
+        {% endfor %}
+      </tr>
+    </tbody>
+  </table>
+  <p></p>
+  <p></p>
+  <h2>그룹정보 상세보기</h2>
+  <table class="table table-hover my-auto">
+  	<colgroup>
+  		<col width="5%"/>
+  		<col width="10%"/>
+  		<col width="15%">
+  		<col width="*"/>
+  		<col width="15%"/>
+      <col width="15%"/>
+      <col width="15%"/>
+  	</colgroup>
+    <thead class="table-dark">
+      <tr>
+        <th><input type="checkbox" id='checkall'></th>
+        <th>id</th>
+        <th>name</th>
+        <th>path</th>
+        <th>group</th>
+        <th>droneid</th>
+        <th>thumbnail</th>
+      </tr>
+    </thead>
+    <tbody id="example-table-1">
+      {% if question_list %}
+        {% for l in question_list %}
+        <tr>
+          <td style = 'vertical-align: inherit;' onclick="event.cancelBubble=true"><input type="checkbox" name='checkbox' value='{{l.id}}'></td>
+          <td style = 'vertical-align: inherit;'>{{ l.id}}</td>
+          <td style = 'vertical-align: inherit;'>{{ l.name }}</td>
+          <td style = 'vertical-align: inherit;'>{{ l.path }}</td>
+          <td style = 'vertical-align: inherit;'>{{ l.groupid }}</td>
+          <td style = 'vertical-align: inherit;'>{{ l.droneid }}</td>
+          <td style = 'vertical-align: inherit;'><img src="{{l.path}}/{{l.name}}" width=80></td>
+        </tr>
+        {% endfor %}
+        {% else %}
+        <tr>
+          <td colspan="3">저장된 데이터가 없습니다..</td>
+        </tr>
+        {% endif %}
+      </tr>      
+    </tbody>
+  </table>
+
+  <div class="container" style="text-align:right">
+	  <div class="btn-group">
+	    <button type="button" class="btn btn-danger"  id="deleteID">삭제</button>&nbsp;&nbsp;
+		  <button type="button" class="btn btn-primary" onclick="goList()">목록</button>
+	  </div>
+  </div>
+  {% include "pageing.html" %}
+</form>	
+</div>
+
+<script>
+//=========================================================================================================
+// 그룹 리스트 http://127.0.0.1:8000/board/grouplist
+//=========================================================================================================
+var checkAllCBx = document.getElementById('checkall');        // 체크박스
+var deleteIDBtn = document.getElementById('deleteID');  // 삭제 버튼
+var checkAllFlag = false; // flag
+// 이벤트 
+checkAllCBx.addEventListener('click', checkAllCheckBox);
+deleteIDBtn.addEventListener('click', deleteID);
+
+// 체크박스 표시된 groupid를 ajax로 전달
+function deleteID(){
+  checkListID = value_check()
+  // var gourpid = document.getElementById('gourpid');
+  $.ajax({
+    type: "POST", 
+    url:'/board/deleteID',
+    data: {'checkListID': checkListID}      
+  });
+}
+
+// 전체 체크박스 클릭시 모든 체크박스 토글
+function checkAllCheckBox(){
+  checkAllFlag = !checkAllFlag;
+  var checkboxes = document.getElementsByName("checkbox");
+  if (checkAllFlag==true){
+    for (i=0; i<checkboxes.length; i++){
+      checkboxes[i].checked = true;
+    }
+  }else{
+    for (i=0; i<checkboxes.length; i++){
+      checkboxes[i].checked = false;
+    }
+  }
+}
+
+// 체크되어 있는 체크 박스에서 value 가져와서 문자열로 만들기
+function value_check() {
+  var checkListID = '';
+  var checkboxes = document.getElementsByName("checkbox")
+  for (var i=0; i<checkboxes.length; i++) {
+    if (checkboxes[i].checked == true) {
+      checkListID=checkListID+ checkboxes[i].value + ',' 
+      
+    }
+  }
+  return checkListID
+}
+
+// 목록으로 돌아가기
+function goList(){
+  location.href="/board/grouplist"; //get방식으로 페이지 넘길때
+}
+
+// 테이블의 행을 눌러서 실행
+$("#example-table-1 tr").click(function(){ 	
+  var str = ""
+  var tdArr = new Array();	// 배열 선언
+  var tr = $(this);
+  var td = tr.children();
+  td.each(function(i){
+    tdArr.push(td.eq(i).text());
+  });
+  var id = td.eq(1).text();
+  location.href="/board/detaillist/" + id;
+});
+//=========================================================================================================
+//=========================================================================================================
+</script>
+{% endblock %}
