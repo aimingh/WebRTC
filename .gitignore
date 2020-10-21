@@ -3,3 +3,4 @@ board/migrations/*.py
 */*/__pycache__/*.pyc
 */*/*/*/*.png
 db.sqlite3
+.vscode/*
